@@ -4,12 +4,16 @@
   "version": "1.0.0",
   "description": "Record screen and upload to Cloudinary.",
   "permissions": [
+    "offscreen",
     "storage"
   ],
   "host_permissions": [
     "http://localhost:3000/*",
     "https://*.vercel.app/*"
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_popup": "index.html",
     "default_title": "QuickRec - Screen Recorder"
