@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { Play, Square, Copy, Check } from 'lucide-react';
 
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '');
+
 export default function App() {
   const [recording, setRecording] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -64,7 +66,7 @@ export default function App() {
     formData.append('video', blob, 'recording.webm');
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:3000/api/upload', true);
+    xhr.open('POST', `${API_URL}/api/upload`, true);
 
     xhr.upload.onprogress = (event) => {
       if (event.lengthComputable) {
@@ -90,7 +92,7 @@ export default function App() {
     };
 
     xhr.onerror = () => {
-      setError("Network error. Check if server is running on http://localhost:3000");
+      setError(`Network error. Check if the API is reachable at ${API_URL}/api/upload`);
       setUploading(false);
       console.error("XHR Error");
     };
