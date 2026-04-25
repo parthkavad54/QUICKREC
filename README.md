@@ -20,7 +20,7 @@ QuickRec is a Chrome extension that records your screen, uploads the video to Cl
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/quickRec.git
+git clone https://github.com/parthkavad54/QUICKREC.git
 cd quickRec
 ```
 
