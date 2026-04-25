@@ -3,6 +3,8 @@ import { Play, Square, Copy, Check, AlertCircle, Clock3, UploadCloud, CircleChec
 
 const API_URL = (import.meta.env.VITE_API_URL || 'https://quickrec-nu.vercel.app').replace(/\/$/, '');
 
+const hasChromeStorage = typeof chrome !== 'undefined' && Boolean(chrome.storage?.local);
+
 type RecorderState = {
   recording: boolean;
   uploading: boolean;
@@ -23,6 +25,11 @@ const defaultState: RecorderState = {
 
 function sendMessage<T>(message: Record<string, unknown>) {
   return new Promise<T>((resolve, reject) => {
+    if (typeof chrome === 'undefined' || !chrome.runtime?.sendMessage) {
+      reject(new Error('Chrome extension APIs are not available. Load this app as an unpacked extension.'));
+      return;
+    }
+
     chrome.runtime.sendMessage(message, (response) => {
       if (chrome.runtime.lastError) {
         reject(new Error(chrome.runtime.lastError.message));
@@ -39,21 +46,26 @@ export default function App() {
   const [displayProgress, setDisplayProgress] = useState(0);
 
   useEffect(() => {
+    if (!hasChromeStorage) {
+      setState((current) => ({
+        ...current,
+        error: 'Open QuickRec from the extension icon. Chrome APIs are not available in a normal web tab.',
+      }));
+      return;
+    }
+
     chrome.storage.local.set({ apiUrl: API_URL });
 
-    chrome.storage.local.get(
-      ['recording', 'uploading', 'uploadProgress', 'videoUrl', 'error'],
-      (items) => {
-        setState((current) => ({
-          ...current,
-          recording: Boolean(items.recording),
-          uploading: Boolean(items.uploading),
-          uploadProgress: typeof items.uploadProgress === 'number' ? items.uploadProgress : 0,
-          videoUrl: typeof items.videoUrl === 'string' ? items.videoUrl : null,
-          error: typeof items.error === 'string' ? items.error : null,
-        }));
-      },
-    );
+    chrome.storage.local.get(['recording', 'uploading', 'uploadProgress', 'videoUrl', 'error'], (items) => {
+      setState((current) => ({
+        ...current,
+        recording: Boolean(items.recording),
+        uploading: Boolean(items.uploading),
+        uploadProgress: typeof items.uploadProgress === 'number' ? items.uploadProgress : 0,
+        videoUrl: typeof items.videoUrl === 'string' ? items.videoUrl : null,
+        error: typeof items.error === 'string' ? items.error : null,
+      }));
+    });
 
     const handleStorageChange = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
       if (areaName !== 'local') {
@@ -119,21 +131,35 @@ export default function App() {
 
   const startRecording = async () => {
     try {
+      if (!hasChromeStorage) {
+        throw new Error('Open QuickRec from the extension icon, not a normal browser tab.');
+      }
+
       await sendMessage<{ ok: boolean }>({ type: 'START_RECORDING' });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Could not start recording';
       setState((current) => ({ ...current, error: message }));
-      await chrome.storage.local.set({ error: message });
+
+      if (hasChromeStorage) {
+        await chrome.storage.local.set({ error: message });
+      }
     }
   };
 
   const stopRecording = async () => {
     try {
+      if (!hasChromeStorage) {
+        throw new Error('Open QuickRec from the extension icon, not a normal browser tab.');
+      }
+
       await sendMessage<{ ok: boolean }>({ type: 'STOP_RECORDING' });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Could not stop recording';
       setState((current) => ({ ...current, error: message }));
-      await chrome.storage.local.set({ error: message });
+
+      if (hasChromeStorage) {
+        await chrome.storage.local.set({ error: message });
+      }
     }
   };
 

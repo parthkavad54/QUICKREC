@@ -2,34 +2,34 @@
 
 :root {
 	color-scheme: light dark;
-	--qr-bg: #f3f4f6;
-	--qr-surface: rgba(255, 255, 255, 0.86);
+	--qr-bg: #ffffff;
+	--qr-surface: #ffffff;
 	--qr-surface-strong: #ffffff;
-	--qr-border: rgba(17, 24, 39, 0.1);
-	--qr-text: #111827;
-	--qr-muted: #6b7280;
-	--qr-primary: #2563eb;
-	--qr-primary-hover: #1d4ed8;
-	--qr-danger: #dc2626;
-	--qr-danger-hover: #b91c1c;
-	--qr-success: #16a34a;
+	--qr-border: rgba(17, 24, 39, 0.12);
+	--qr-text: #111111;
+	--qr-muted: #5f6368;
+	--qr-primary: #1a73e8;
+	--qr-primary-hover: #1765cc;
+	--qr-danger: #d93025;
+	--qr-danger-hover: #c5221f;
+	--qr-success: #137333;
 	--qr-track: rgba(17, 24, 39, 0.08);
 }
 
 @media (prefers-color-scheme: dark) {
 	:root {
-		--qr-bg: #111827;
-		--qr-surface: rgba(17, 24, 39, 0.88);
-		--qr-surface-strong: #1f2937;
-		--qr-border: rgba(255, 255, 255, 0.08);
-		--qr-text: #f9fafb;
-		--qr-muted: #9ca3af;
-		--qr-primary: #60a5fa;
-		--qr-primary-hover: #3b82f6;
-		--qr-danger: #f87171;
-		--qr-danger-hover: #ef4444;
-		--qr-success: #34d399;
-		--qr-track: rgba(255, 255, 255, 0.08);
+		--qr-bg: #000000;
+		--qr-surface: #0b0b0b;
+		--qr-surface-strong: #111111;
+		--qr-border: rgba(255, 255, 255, 0.12);
+		--qr-text: #ffffff;
+		--qr-muted: #b3b3b3;
+		--qr-primary: #4d8df7;
+		--qr-primary-hover: #6aa0ff;
+		--qr-danger: #ff6b6b;
+		--qr-danger-hover: #ff5252;
+		--qr-success: #52d273;
+		--qr-track: rgba(255, 255, 255, 0.1);
 	}
 }
 
@@ -65,8 +65,7 @@ body {
 	border: 1px solid var(--qr-border);
 	border-radius: 16px;
 	background: var(--qr-surface);
-	backdrop-filter: blur(16px);
-	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.16);
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 	padding: 14px;
 	display: flex;
 	flex-direction: column;
@@ -182,7 +181,7 @@ body {
 }
 
 .qr-button-ghost {
-	background: transparent;
+	background: var(--qr-surface-strong);
 	color: var(--qr-text);
 	border-color: var(--qr-border);
 }
@@ -242,7 +241,7 @@ body {
 .qr-link-box {
 	border: 1px solid var(--qr-border);
 	border-radius: 12px;
-	background: var(--qr-surface);
+	background: var(--qr-surface-strong);
 	padding: 10px;
 	display: grid;
 	gap: 6px;
