@@ -1,4 +1,5 @@
 const OFFSCREEN_URL = 'offscreen.html';
+const DEFAULT_API_URL = 'https://quickrec-nu.vercel.app';
 
 async function hasOffscreenDocument() {
   if (!chrome.runtime.getContexts) {
@@ -34,6 +35,7 @@ async function ensureOffscreenDocument() {
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.set({
+    apiUrl: DEFAULT_API_URL,
     recording: false,
     uploading: false,
     uploadProgress: 0,
@@ -58,6 +60,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (message?.type === 'STOP_RECORDING') {
     chrome.runtime.sendMessage({ type: 'OFFSCREEN_STOP_RECORDING' });
+    sendResponse({ ok: true });
+    return false;
+  }
+
+  if (message?.type === 'GET_API_URL') {
+    chrome.storage.local.get(['apiUrl'], (items) => {
+      sendResponse({ apiUrl: items.apiUrl || DEFAULT_API_URL });
+    });
+
+    return true;
+  }
+
+  if (message?.type === 'SYNC_STATE') {
+    chrome.storage.local.set(message.patch || {});
     sendResponse({ ok: true });
     return false;
   }

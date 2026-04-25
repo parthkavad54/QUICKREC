@@ -5,12 +5,21 @@ let activeStream = null;
 let chunks = [];
 
 function updateState(patch) {
-  chrome.storage.local.set(patch);
+  chrome.runtime.sendMessage({ type: 'SYNC_STATE', patch });
 }
 
 async function getApiUrl() {
-  const { apiUrl } = await chrome.storage.local.get(['apiUrl']);
-  return typeof apiUrl === 'string' && apiUrl.trim() ? apiUrl.replace(/\/$/, '') : DEFAULT_API_URL;
+  return new Promise((resolve) => {
+    chrome.runtime.sendMessage({ type: 'GET_API_URL' }, (response) => {
+      if (chrome.runtime.lastError) {
+        resolve(DEFAULT_API_URL);
+        return;
+      }
+
+      const apiUrl = response && typeof response.apiUrl === 'string' ? response.apiUrl : DEFAULT_API_URL;
+      resolve(apiUrl.trim() ? apiUrl.replace(/\/$/, '') : DEFAULT_API_URL);
+    });
+  });
 }
 
 async function uploadVideo(blob) {
