@@ -35,7 +35,7 @@ npm install
 Create a file named `.env` in the project root and add your values:
 
 ```env
-VITE_API_URL=https://quickrec-nu.vercel.app
+VITE_API_URL=
 
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
