@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "QuickRec",
+  "version": "1.0.0",
+  "description": "Record screen and upload to Cloudinary.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "http://localhost:3000/*"
+  ],
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "QuickRec - Screen Recorder"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "QuickRec",
+  "description": "Simple screen recording extension that uploads to Cloudinary and generates a shareable link.",
+  "requestFramePermissions": ["display-capture"],
+  "majorCapabilities": []
+}
